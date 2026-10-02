@@ -225,9 +225,9 @@
                     >
                         <!-- Background Image Layer (card: cover is intended) -->
                         <div class="absolute inset-0 z-0 overflow-hidden">
-                                                        <template x-if="p.video">
-                                <video
-                                    :src="p.video"
+                                                        <template x-if="p.Video">
+                                <Video
+                                    :src="p.Video"
                                     :poster="p.image"
                                     autoplay
                                     muted
@@ -235,9 +235,9 @@
                                     playsinline
                                     preload="metadata"
                                     class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                                ></video>
+                                ></Video>
                             </template>
-                            <template x-if="!p.video">
+                            <template x-if="!p.Video">
                                 <img
                                     loading="lazy"
                                     :src="p.image"
@@ -312,17 +312,17 @@
                         <!-- Image column -->
                         <div class="md:col-span-2">
                             <div class="flex justify-center rounded-xl border border-white/10 bg-black/40 p-2">
-                                                                <template x-if="selectedProject.video">
-                                    <video
-                                        :src="selectedProject.video"
+                                                                <template x-if="selectedProject.Video">
+                                    <Video
+                                        :src="selectedProject.Video"
                                         :poster="selectedProject.image"
                                         controls
                                         playsinline
                                         preload="metadata"
                                         class="block w-auto h-auto max-w-full max-h-[70vh] rounded-lg"
-                                    ></video>
+                                    ></Video>
                                 </template>
-                                <template x-if="!selectedProject.video">
+                                <template x-if="!selectedProject.Video">
                                     <img
                                         :src="selectedProject.image"
                                         :alt="selectedProject.title"
@@ -519,7 +519,7 @@
                         id: 3, rotate: -1,
                         title: 'Brand Adv Video', category: 'Video Edit', location: 'Okinawa & Osaka JP', year: '2026',
                         image: 'images/yasouOK2-02.png',
-                        video: 'videos/OK7.mov',
+                        Video: 'Videos/OK7.mov',
                         client: 'Tattoo Artist',
                         deliverables: 'Digital',
                         tech: 'Adobe:Photoshop,Illustrator,After Effects.',
@@ -529,7 +529,7 @@
                         id: 4, rotate: 4,
                         title: '3D Edit', category: 'DIGITAL', location: 'Okinawa & Tokyo JP', year: '2025',
                         image: 'images/スクリーンショット 2026-09-30 16.56.22.png',
-                        video: 'videos/0001-0160(ura3).avi',
+                        Video: 'Videos/0001-0160(ura3).mov',
                         client: 'ALLDAY Official',
                         deliverables: '3D Digital',
                         tech: 'Blender',
@@ -556,7 +556,7 @@
                     {
                         id: 7, rotate: -2,
                         title: 'Poster Design', category: 'Digital Collage & Graphic', location: 'Oita JP', year: '2026',
-                        image: 'images/A3 abstract poster.png',
+                        image: 'images/A3-abstract poster.jpg',
                         client: 'Independent owner',
                         deliverables: 'A4 Poster',
                         tech: 'Adobe:Photoshop',
