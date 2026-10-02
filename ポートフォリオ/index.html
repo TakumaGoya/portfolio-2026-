@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="build" content="modal-fix-2026-09-29">
+    <title>TAKUMA GOYA // GRAPHIC DESIGNER</title>
+    <meta name="description" content="沖縄を拠点に活動するグラフィックデザイナー TAKUMA GOYA のポートフォリオ。ブランディング、ロゴ、フライヤー、デジタルコラージュ、映像編集など。">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="TAKUMA GOYA // GRAPHIC DESIGNER">
+    <meta property="og:description" content="沖縄を拠点に活動するグラフィックデザイナーのポートフォリオ">
+    <meta name="theme-color" content="#0A0A0A">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0A0A0A',
+                        cardDark: '#121212',
+                        accent: '#E6E6E6',
+                        muted: '#666666'
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0A0A0A;
+            color: #E6E6E6;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .text-outline {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.07);
+            color: transparent;
+        }
+
+        .card-deck-item {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+            transform-origin: center center;
+        }
+
+        .card-deck-item:hover {
+            transform: translateY(-12px) rotate(0deg) scale(1.02) !important;
+            z-index: 30 !important;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #222222; border-radius: 3px; }
+
+        .bg-grid {
+            background-size: 25px 25px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+        }
+
+        /* Hero photo card (hover motion) */
+        .hero-photo {
+            transition: transform 0.25s ease-out, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        .hero-photo:hover {
+            box-shadow: 0 30px 60px -15px rgba(255, 255, 255, 0.12);
+        }
+        .hero-photo img {
+            filter: grayscale(0.85) contrast(1.05);
+            transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-photo:hover img {
+            filter: grayscale(0) contrast(1);
+            transform: scale(1.06);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-photo, .hero-photo img { transition: none; }
+            .hero-photo:hover img { transform: none; }
+        }
+
+                /* Custom cursor */
+        #cursor-blob {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.85);
+            filter: blur(4px);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            will-change: transform;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            * { cursor: none !important; }
+            input, textarea { cursor: text !important; }
+        }
+                /* Film grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.15;
+            background-size: 200px 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+
+<body
+    x-data="portfolio()"
+    @keydown.escape.window="closeAll()"
+    @scroll.window="scrolled = window.scrollY > 600"
+    :class="(selectedProject || contactOpen) ? 'overflow-hidden' : ''"
+    class="relative min-h-screen bg-dark text-accent antialiased selection:bg-white selection:text-black bg-grid"
+>
+    <div id="cursor-blob" aria-hidden="true"></div>
+
+    <!-- Large Background Title Watermarks -->
+    <div class="fixed inset-0 pointer-events-none select-none overflow-hidden z-0 flex flex-col justify-between p-4 md:p-12 opacity-40">
+        <div class="font-display font-extrabold text-[15vw] leading-none uppercase text-outline tracking-tighter transform -translate-y-10">
+            WORK
+        </div>
+        <div class="font-display font-extrabold text-[15vw] leading-none uppercase text-outline tracking-tighter text-right transform translate-y-10">
+            ARCHIVE
+        </div>
+    </div>
+
+    <!-- Fixed Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-40 mix-blend-difference px-6 py-6 md:px-12 flex justify-between items-center border-b border-white/5 backdrop-blur-md">
+        <a href="#" class="group flex items-center gap-3">
+            <span class="w-3 h-3 bg-white rounded-full transition-transform group-hover:scale-125 duration-300"></span>
+            <span class="font-display font-bold text-lg md:text-xl tracking-widest text-white uppercase">TAKUMA GOYA</span>
+        </a>
+
+        <div class="flex items-center gap-4">
+            <a href="#works" class="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white/80 hover:text-white transition-colors duration-300">
+                WORKS
+            </a>
+            <button @click="contactOpen = true" class="px-4 py-2 border border-white/20 rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-white hover:text-black transition-all duration-300">
+                CONTACT
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="relative z-10 pt-36 pb-20 px-6 md:px-12 max-w-7xl mx-auto min-h-screen flex flex-col justify-between">
+
+        <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-6 md:gap-12">
+
+        <div class="max-w-4xl mt-12 mb-20">
+            <div class="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-mono text-muted mb-6 tracking-wide">
+                [ CREATIVE PORTFOLIO // OKINAWA ]
+            </div>
+            <h1 class="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.05] uppercase text-white">
+                TAKUMA GOYA<br>
+                                <span class="block mt-5 font-sans font-light text-lg sm:text-2xl md:text-3xl tracking-[0.4em] text-white/70">GRAPHIC DESIGNER</span>
+            </h1>
+            <p class="mt-8 text-xs sm:text-sm text-muted max-w-2xl font-light leading-relaxed">
+                アパレルブランド直営店舗の責任者として店舗マネジメントやブランドプロモーションに携わる傍ら、沖縄を拠点にフリーランスのグラフィックデザイナーとして活動中。ブランディングからプロモーション施策まで、長期的なパートナーシップのもと多様なクリエイティブをトータルで手がけています。
+            </p>
+        </div>
+
+        <!-- Hero Photo Card (hover: tilt + colorize) -->
+        <div class="shrink-0 mt-4 md:mt-0 mx-auto md:mx-0" style="transform: rotate(2deg);">
+            <div
+                x-data="heroPhoto()"
+                @mousemove="move($event)"
+                @mouseleave="reset()"
+                :style="`transform: perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`"
+                class="hero-photo relative w-56 sm:w-64 lg:w-80 aspect-[4/5] bg-cardDark border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+            >
+                <img
+                    x-show="ok"
+                    x-init="if ($el.complete && $el.naturalWidth === 0) ok = false"
+                    @error="ok = false"
+                    src="images/takumaa.png"
+                    alt="TAKUMA GOYA"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
+                <div x-show="!ok" class="absolute inset-0 flex items-center justify-center font-display text-5xl font-extrabold text-white/10 tracking-tighter">
+                    PHOTO
+                </div>
+                <span class="absolute top-3 left-3 font-mono text-[10px] text-white/90 tracking-widest bg-black/60 px-2 py-1 rounded">[ PROFILE ]</span>
+            </div>
+        </div>
+
+        </div>
+
+        <!-- Card List -->
+        <section id="works" class="w-full my-12 scroll-mt-24">
+
+            <div class="flex justify-between items-end mb-12 border-b border-white/10 pb-4">
+                <span class="text-xs font-mono text-muted uppercase tracking-widest">[ INDEX // PORTFOLIO ARCHIVE ]</span>
+                <span class="text-xs font-mono text-muted" x-text="`${projects.length} ITEMS`"></span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 items-center">
+
+                <template x-for="p in projects" :key="p.id">
+                    <div
+                        class="card-deck-item relative group cursor-pointer w-full aspect-[3/4] bg-cardDark border border-white/10 rounded-xl overflow-hidden shadow-2xl flex flex-col justify-between p-6"
+                        :style="`transform: rotate(${p.rotate}deg)`"
+                        @click="open(p)"
+                    >
+                        <!-- Background Image Layer (card: cover is intended) -->
+                        <div class="absolute inset-0 z-0 overflow-hidden">
+                                                        <template x-if="p.video">
+                                <video
+                                    :src="p.video"
+                                    :poster="p.image"
+                                    autoplay
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="metadata"
+                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                ></video>
+                            </template>
+                            <template x-if="!p.video">
+                                <img
+                                    loading="lazy"
+                                    :src="p.image"
+                                    :alt="p.title"
+                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                >
+                            </template>
+                        </div>
+
+                        <!-- Overlay Header -->
+                        <div class="flex justify-between items-start z-20">
+                            <span class="font-mono text-xs text-white/90 tracking-widest bg-black/60 px-2 py-1 rounded" x-text="String(p.id).padStart(2, '0')"></span>
+                            <div class="opacity-0 group-hover:opacity-100 bg-white text-black font-semibold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                                View Project
+                            </div>
+                        </div>
+
+                        <!-- Overlay Footer -->
+                        <div class="z-20">
+                            <div class="bg-black/80 backdrop-blur-md border border-white/10 p-4 rounded-lg">
+                                <h3 class="font-display text-xl font-bold uppercase tracking-wider text-white" x-text="p.title"></h3>
+                                <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-xs font-mono text-muted">
+                                    <span class="uppercase tracking-widest" x-text="p.category"></span>
+                                    <span class="text-white/60" x-text="p.location"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================================================
+         Project Detail Modal
+         ・画像には高さを固定しない(h-64 / h-80 / overflow-hidden を使わない)
+         ・object-cover は使わず、縦横比を保つ object-contain + max-h のみ
+         ========================================================= -->
+    <div
+        x-cloak
+        x-show="selectedProject !== null"
+        x-transition.opacity
+        @click.self="selectedProject = null"
+        class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-black/90 backdrop-blur-xl"
+        role="dialog"
+        aria-modal="true"
+    >
+        <div class="bg-cardDark border border-white/20 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-6 sm:p-10 relative text-white shadow-2xl">
+
+            <button
+                @click="selectedProject = null"
+                aria-label="Close"
+                class="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors z-30"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <template x-if="selectedProject">
+                <div>
+                    <span class="text-xs font-mono text-muted uppercase tracking-widest" x-text="`[ CASE STUDY ${String(selectedProject.id).padStart(2, '0')} ]`"></span>
+                    <h2 class="font-display text-3xl sm:text-5xl font-extrabold uppercase tracking-tight mt-2 mb-4 pr-12" x-text="selectedProject.title"></h2>
+
+                    <div class="flex flex-wrap gap-4 text-xs font-mono border-b border-white/10 pb-6 mb-8">
+                        <span class="px-3 py-1 bg-white/10 rounded-full" x-text="`CATEGORY: ${selectedProject.category}`"></span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full" x-text="`LOCATION: ${selectedProject.location}`"></span>
+                        <span class="px-3 py-1 bg-white/10 rounded-full" x-text="`YEAR: ${selectedProject.year}`"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-10">
+
+                        <!-- Image column -->
+                        <div class="md:col-span-2">
+                            <div class="flex justify-center rounded-xl border border-white/10 bg-black/40 p-2">
+                                                                <template x-if="selectedProject.video">
+                                    <video
+                                        :src="selectedProject.video"
+                                        :poster="selectedProject.image"
+                                        controls
+                                        playsinline
+                                        preload="metadata"
+                                        class="block w-auto h-auto max-w-full max-h-[70vh] rounded-lg"
+                                    ></video>
+                                </template>
+                                <template x-if="!selectedProject.video">
+                                    <img
+                                        :src="selectedProject.image"
+                                        :alt="selectedProject.title"
+                                        class="block w-auto h-auto max-w-full max-h-[70vh] object-contain rounded-lg"
+                                    >
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Text column -->
+                        <div class="md:col-span-3 space-y-8">
+                            <div class="space-y-4 text-muted font-light leading-relaxed">
+                                <h4 class="text-white font-bold text-sm uppercase tracking-wider font-mono">Concept &amp; Overview</h4>
+                                <p x-text="selectedProject.description"></p>
+                            </div>
+
+                            <div class="space-y-4 border-t border-white/10 pt-6 text-xs font-mono">
+                                <div>
+                                    <span class="text-muted block uppercase">Client / Context</span>
+                                    <span class="text-white font-medium" x-text="selectedProject.client"></span>
+                                </div>
+                                <div>
+                                    <span class="text-muted block uppercase">Deliverables</span>
+                                    <span class="text-white font-medium" x-text="selectedProject.deliverables"></span>
+                                </div>
+                                <div>
+                                    <span class="text-muted block uppercase">Tech Stack</span>
+                                    <span class="text-white font-medium" x-text="selectedProject.tech"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex justify-end">
+                        <button @click="selectedProject = null" class="px-6 py-2.5 bg-white text-black font-bold uppercase text-xs rounded-full hover:bg-neutral-200 transition-colors">
+                            Close Preview
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div
+        x-cloak
+        x-show="contactOpen"
+        x-transition.opacity
+        @click.self="contactOpen = false"
+        class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl"
+        role="dialog"
+        aria-modal="true"
+    >
+        <div class="bg-cardDark border border-white/20 rounded-2xl w-full max-w-lg p-8 relative text-white shadow-2xl">
+            <button @click="contactOpen = false" aria-label="Close" class="absolute top-6 right-6 p-2 rounded-full border border-white/10 hover:bg-white hover:text-black transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <span class="text-xs font-mono text-muted uppercase tracking-widest">[ INITIATE CONTACT ]</span>
+            <h3 class="font-display text-3xl font-bold uppercase tracking-tight mt-2 mb-6">Let's Collaborate</h3>
+
+            <form @submit.prevent="submitContact()" class="space-y-4 text-xs font-mono">
+                <div>
+                    <label class="block text-muted uppercase mb-1">Your Name</label>
+                    <input type="text" required class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+                <div>
+                    <label class="block text-muted uppercase mb-1">Email Address</label>
+                    <input type="email" required class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+                <div>
+                    <label class="block text-muted uppercase mb-1">Project Brief</label>
+                    <textarea rows="4" required class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white transition-colors"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-white text-black font-bold uppercase tracking-wider text-xs rounded-lg hover:bg-neutral-200 transition-colors">
+                    Send Transmission
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast (contact submitted) -->
+    <div
+        x-cloak
+        x-show="alertMessage"
+        x-transition.opacity
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] px-5 py-3 bg-white text-black text-xs font-mono font-bold uppercase tracking-wider rounded-full shadow-2xl"
+    >
+        Message sent
+    </div>
+
+    <!-- Back to top -->
+    <button
+        x-cloak
+        x-show="scrolled && !selectedProject && !contactOpen"
+        x-transition.opacity
+        @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        aria-label="Back to top"
+        class="fixed bottom-6 right-6 z-40 w-11 h-11 flex items-center justify-center rounded-full border border-white/20 bg-black/60 backdrop-blur-md text-white hover:bg-white hover:text-black transition-colors"
+    >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-white/10 py-12 px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-mono text-muted">
+        <div>
+            © 2026 TAKUMA GOYA. ALL RIGHTS RESERVED.
+        </div>
+    </footer>
+
+    <script>
+        console.log('[portfolio] build: photo-fix-2026-09-30');
+        // ===== Custom cursor (blurred white circle with lag) =====
+        (function () {
+            const blob = document.getElementById('cursor-blob');
+            if (!blob) return;
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) { blob.remove(); return; }
+
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const ease = reduce ? 1 : 0.3;   // 小さいほど遅れが大きくなります(0.08〜0.25 で調整)
+            let tx = -100, ty = -100, x = -100, y = -100, ts = 1, s = 1, visible = false;
+
+            document.addEventListener('mousemove', (e) => {
+                tx = e.clientX; ty = e.clientY;
+                if (!visible) { x = tx; y = ty; visible = true; }
+                const t = e.target;
+                if (t.closest && t.closest('input, textarea')) {
+                    blob.style.opacity = '0';
+                } else {
+                    blob.style.opacity = '1';
+                    ts = (t.closest && t.closest('a, button, [role="button"], .card-deck-item')) ? 1.8 : 1;
+                }
+            });
+            document.documentElement.addEventListener('mouseleave', () => { blob.style.opacity = '0'; visible = false; });
+
+            (function loop() {
+                x += (tx - x) * ease;
+                y += (ty - y) * ease;
+                s += (ts - s) * 0.15;
+                blob.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
+                requestAnimationFrame(loop);
+            })();
+        })();
+
+        function heroPhoto() {
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            return {
+                rx: 0, ry: 0, ok: true,
+                move(e) {
+                    if (reduce) return;
+                    const r = e.currentTarget.getBoundingClientRect();
+                    this.ry = (((e.clientX - r.left) / r.width) - 0.5) * 14;
+                    this.rx = -(((e.clientY - r.top) / r.height) - 0.5) * 14;
+                },
+                reset() { this.rx = 0; this.ry = 0; }
+            };
+        }
+
+        function portfolio() {
+            return {
+                selectedProject: null,
+                contactOpen: false,
+                alertMessage: false,
+                scrolled: false,
+
+                open(project) { this.selectedProject = project; },
+                closeAll() { this.selectedProject = null; this.contactOpen = false; },
+                submitContact() {
+                    this.contactOpen = false;
+                    this.alertMessage = true;
+                    setTimeout(() => { this.alertMessage = false; }, 3000);
+                },
+
+                projects: [
+                    {
+                        id: 1, rotate: -3,
+                        title: 'Flyer Work', category: 'Graphic Design', location: 'Okinawa JP', year: '2026',
+                        image: 'images/issho.PNG',
+                        client: 'ISSHO Architects',
+                        deliverables: 'Digital Size:A4',
+                        tech: 'Adobe:Photoshop,Illustrator.',
+                        description: 'ISSHO Architects 20th Annibersary Eventのフライヤー制作。設計事務所らしさを出すためにグリッドを精密に引き、少し規律のあるデザインに仕上げました。'
+                    },
+                    {
+                        id: 2, rotate: 2,
+                        title: 'Artwork', category: 'Digital Collage & Graphic', location: 'Okinawa & Tokyo JP', year: '2026',
+                        image: 'images/4 2.JPG',
+                        client: 'Honey Records',
+                        deliverables: 'Digital Size:3000*3000',
+                        tech: 'Adobe:Photoshop,Illustrator.',
+                        description: '令和8年熊本地震復興へのチャリティー作品にアートワークでのご依頼をいただきました。こちらの依頼は「熊本復興活動の助けになりたい」という思いから、無償での作品提供とさせていただきました。'
+                    },
+                    {
+                        id: 3, rotate: -1,
+                        title: 'Brand Adv Video', category: 'Video Edit', location: 'Okinawa & Osaka JP', year: '2026',
+                        image: 'images/yasouOK2-02.png',
+                        video: 'videos/OK7.mov',
+                        client: 'Tattoo Artist',
+                        deliverables: 'Digital',
+                        tech: 'Adobe:Photoshop,Illustrator,After Effects.',
+                        description: '撮影ディレクション＆編集を全て担当させてもらいました。制作物はSNS告知に静止画と動画、ECサイトのルックに静止画がそれぞれ採用されています。'
+                    },
+                    {
+                        id: 4, rotate: 4,
+                        title: '3D Edit', category: 'DIGITAL', location: 'Okinawa & Tokyo JP', year: '2025',
+                        image: 'images/スクリーンショット 2026-09-30 16.56.22.png',
+                        video: 'videos/0001-0160(ura3).avi',
+                        client: 'ALLDAY Official',
+                        deliverables: '3D Digital',
+                        tech: 'Blender',
+                        description: '既存のロゴに3Dモデリングおよび独自の質感を付与し、立体的な奥行きを演出。さらに、控えめな回転アニメーションを実装することで映像としての魅力を高めました。制作した映像素材は、メインビジュアルを構成する総合的な映像作品へと統合・活用されました。'
+                    },
+                    {
+                        id: 5, rotate: -2,
+                        title: 'label design', category: 'Graphic Design', location: 'Okinawa JP', year: '2025',
+                        image: 'images/アートボード 3.png',
+                        client: '株式会社 琉球マルシェ様',
+                        deliverables: 'Printed Label',
+                        tech: 'Adobe:Illustrator.',
+                        description: 'マルシェやローカルスーパーでの販売にあたり、周囲の商品に馴染む「親しみやすさ」と品質感を両立。あえてプロっぽさを抑えた絶妙なバランスで、売場で手に取りやすいデザインに仕上げました。'
+                    },
+                    {
+                        id: 6, rotate: 3,
+                        title: 'SNS images', category: 'Graphic Design', location: 'Okinawa JP', year: '2025',
+                        image: 'images/決まり1.png',
+                        client: 'SHINKOYAKI MIYAHARA',
+                        deliverables: 'Digital,Brand Identity',
+                        tech: 'Adobe:Photoshop,Illustrator.',
+                        description: '新規オープンする飲食店のブランディングから参画し、SNS広告用のビジュアルを制作。カメラマン、オーナー様と連携しながら役割を分業し、お店のメニューと世界観を魅力的に伝えるクリエイティブに仕上げました。'
+                    },
+                    {
+                        id: 7, rotate: -2,
+                        title: 'Poster Design', category: 'Digital Collage & Graphic', location: 'Oita JP', year: '2026',
+                        image: 'images/A3 abstract poster.png',
+                        client: 'Independent owner',
+                        deliverables: 'A4 Poster',
+                        tech: 'Adobe:Photoshop',
+                        description: 'アートに造詣の深いオーナー様からのご依頼を受け、抽象的なポスターデザインを担当。デジタル空間の表現であるRGBから、印刷物であるCMYKへの変換・昇華をテーマに掲げ、フリー素材を再構築するデジタルコラージュの手法を用いて制作しました。'
+                    },
+                    {
+                        id: 8, rotate: 3,
+                        title: 'Logo Design', category: 'DIGITAL', location: 'Okinawa JP', year: '2026',
+                        image: 'images/goood.png',
+                        client: 'good good co.,ltd.',
+                        deliverables: 'Digital Logo',
+                        tech: 'Adobe:illustrator',
+                        description: '新設企業のタイプロゴおよび名刺デザインを担当。「できるだけシンプルに」というご要望のもと、視認性を最優先に考慮しつつ、過度に造形を崩さない洗練されたバランスを追求しました。企業としての信頼感と、長く使えるオーセンティックな佇まいを両立させています。'
+                    },
+                    {
+                        id: 9, rotate: -1,
+                        title: 'MV & Title Logo Design', category: 'Visual Identity', location: 'Okinawa JP', year: '2025',
+                        image: 'images/投稿.PNG',
+                        client: 'Okinawa Artist Crew',
+                        deliverables: 'MV & Logo',
+                        tech: 'Adobe:After Effects,Illustrator,Photoshop.',
+                        description: '沖縄、東京を拠点に活動中のCrewのMV。こちらも撮影から編集まで一貫して担当しました。夏の沖縄の暑さをカラーで調整し、タイトルデザインで曲の雰囲気を維持。均衡を保つよう制作しました。'
+                    }
+                ]
+            };
+        }
+    </script>
+
+</body>
+</html>
